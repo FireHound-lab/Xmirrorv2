@@ -215,7 +215,7 @@ def _edit_telegraph(path, telegraph_content):
                 nxt_page += 1
         telegraph.edit_page(
             path = path[prev_page],
-            title = 'Mirror-leech-bot Torrent Search',
+            title = 'Reileenhub Torrent Search',
             content=content
         )
     return
