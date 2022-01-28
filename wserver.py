@@ -127,7 +127,7 @@ span{
 }
 span.active{
     transform: rotate(90deg);
-    -ms-transform: rotate(90deg);    /* for IE  */
+    -ms-transform: rotate(90deg);	 /* for IE  */
     -webkit-transform: rotate(90deg);/* for browsers supporting webkit (such as chrome, firefox, safari etc.). */
     display: inline-block;
 }
@@ -293,6 +293,10 @@ $('input[type="checkbox"]').change(function(e) {
 </script>
 <script>
     function docready () {
+        $("label[for^='filenode_']").css("cursor", "pointer");
+        $("label[for^='filenode_']").click(function () {
+            $(this).prev().click();
+        });
         checked_size();
         checkingfiles();
         var total_files = $("label[for^='filenode_']").length;
