@@ -127,7 +127,7 @@ span{
 }
 span.active{
     transform: rotate(90deg);
-    -ms-transform: rotate(90deg);	 /* for IE  */
+    -ms-transform: rotate(90deg);    /* for IE  */
     -webkit-transform: rotate(90deg);/* for browsers supporting webkit (such as chrome, firefox, safari etc.). */
     display: inline-block;
 }
@@ -172,20 +172,20 @@ input[type="submit"]:hover, input[type="submit"]:focus{
 </style>
 </head>
 <body>
-  <!--© Designed and coded by @bipuldey19-Telegram-->
+  <!--© Designed and coded by-Telegram-->
     <header>
       <div class="brand">
         <img
-          src="https://telegra.ph/file/cc06d0c613491080cc174.png"
+          src="https://telegra.ph/file/f6e2c53301fbf58c40ed4.jpg"
           alt="logo"
         />
-        <a href="https://t.me/anas_tayyar">
+        <a href="https://t.me/InvizibleWalker">
           <h2 class="name">Qbittorrent Selection</h2>
         </a>
       </div>
       <div class="social">
-        <a href="https://www.github.com/anasty17/mirror-leech-telegram-bot"><i class="fab fa-github"></i></a>
-        <a href="https://t.me/anas_tayyar"><i class="fab fa-telegram"></i></a>
+        <a href="https://github.com/FireHound-lab/Xmirrorv2"><i class="fab fa-github"></i></a>
+        <a href="https://t.me/InvizibleWalker"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
     <section>
@@ -218,37 +218,37 @@ input[type="submit"]:hover, input[type="submit"]:focus{
         });
       });
       if(document.getElementsByTagName("ul").length >= 10){
-      var labels = document.querySelectorAll("label");
-      //Shorting the file/folder names
-      labels.forEach(function (label) {
-        if (label.innerText.toString().split(" ").length >= 6) {
-          let FirstPart = label.innerText
-            .toString()
-            .split(" ")
-            .slice(0, 3)
-            .join(" ");
-          let SecondPart = label.innerText
-            .toString()
-            .split(" ")
-            .splice(-3)
-            .join(" ");
-          label.innerText = `${FirstPart}... ${SecondPart}`;
-        }
-        if (label.innerText.toString().split(".").length >= 6) {
-          let first = label.innerText
-            .toString()
-            .split(".")
-            .slice(0, 3)
-            .join(" ");
-          let second = label.innerText
-            .toString()
-            .split(".")
-            .splice(-3)
-            .join(".");
-          label.innerText = `${first}... ${second}`;
-        }
-      });
-     }
+        var labels = document.querySelectorAll("label");
+        //Shorting the file/folder names
+        labels.forEach(function (label) {
+            if (label.innerText.toString().split(" ").length >= 9) {
+                let FirstPart = label.innerText
+                    .toString()
+                    .split(" ")
+                    .slice(0, 5)
+                    .join(" ");
+                let SecondPart = label.innerText
+                    .toString()
+                    .split(" ")
+                    .splice(-5)
+                    .join(" ");
+                label.innerText = `${FirstPart}... ${SecondPart}`;
+            }
+            if (label.innerText.toString().split(".").length >= 9) {
+                let first = label.innerText
+                    .toString()
+                    .split(".")
+                    .slice(0, 5)
+                    .join(" ");
+                let second = label.innerText
+                    .toString()
+                    .split(".")
+                    .splice(-5)
+                    .join(".");
+                label.innerText = `${first}... ${second}`;
+            }
+        });
+    }
     </script>
 <script>
 $('input[type="checkbox"]').change(function(e) {
@@ -520,20 +520,20 @@ section span{
     </style>
   </head>
 <body>
-   <!--© Designed and coded by @bipuldey19-Telegram-->
+   <!--© Designed and coded by -Telegram-->
     <header>
       <div class="brand">
         <img
-          src="https://telegra.ph/file/cc06d0c613491080cc174.png"
+          src="https://telegra.ph/file/f6e2c53301fbf58c40ed4.jpg"
           alt="logo"
         />
-        <a href="https://t.me/anas_tayyar">
+        <a href="https://t.me/InvizibleWalker">
           <h2 class="name">Qbittorrent Selection</h2>
         </a>
       </div>
       <div class="social">
-        <a href="https://www.github.com/anasty17/mirror-leech-telegram-bot"><i class="fab fa-github"></i></a>
-        <a href="https://t.me/anas_tayyar"><i class="fab fa-telegram"></i></a>
+        <a href="https://github.com/FireHound-lab/Xmirrorv2"><i class="fab fa-github"></i></a>
+        <a href="https://t.me/InvizibleWalker"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
     <section>
@@ -683,7 +683,7 @@ async def set_priority(request):
 @routes.get('/')
 async def homepage(request):
 
-    return web.Response(text="<h1>See mirror-leech-telegram-bot <a href='https://www.github.com/anasty17/mirror-leech-telegram-bot'>@GitHub</a> By <a href='https://github.com/anasty17'>Anas</a></h1>", content_type="text/html")
+    return web.Response(text="<h1>ReileenHub <a href='https://github.com/FireHound-lab/Xmirrorv2'>@GitHub</a> By <a href='https://github.com/FireHound-lab'>Skillet</a></h1>", content_type="text/html")
 
 async def e404_middleware(app, handler):
 
@@ -692,11 +692,11 @@ async def e404_middleware(app, handler):
         try:
             response = await handler(request)
             if response.status == 404:
-                return web.Response(text="<h1>404: Page not found</h2><br><h3>mirror-leech-telegram-bot</h3>", content_type="text/html")
+                return web.Response(text="<h1>404: Page not found</h2><br><h3>Reileenhub</h3>", content_type="text/html")
             return response
         except web.HTTPException as ex:
             if ex.status == 404:
-                return web.Response(text="<h1>404: Page not found</h2><br><h3>mirror-leech-telegram-bot</h3>", content_type="text/html")
+                return web.Response(text="<h1>404: Page not found</h2><br><h3>Reileenhub</h3>", content_type="text/html")
             raise
     return middleware_handler
 

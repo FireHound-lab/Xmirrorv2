@@ -11,8 +11,8 @@ def get_download(client, hash_):
 
 class QbDownloadStatus:
 
-    def __init__(self, listener, client, gid, hash_, select):
-        self.__gid = gid
+    def __init__(self, listener, client, hash_, select):
+        self.__gid = hash_[:12]
         self.__hash = hash_
         self.__select = select
         self.__client = client
@@ -36,7 +36,10 @@ class QbDownloadStatus:
         Gets total size of the mirror file/folder
         :return: total size of mirror
         """
-        return self.__info.size if self.__select else self.__info.total_size
+        if self.__select:
+            return self.__info.size
+        else:
+            return self.__info.total_size
 
     def processed_bytes(self):
         return self.__info.downloaded
