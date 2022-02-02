@@ -4,7 +4,7 @@ from telegram import InlineKeyboardMarkup
 from time import sleep
 from re import split as resplit
 
-from bot import DOWNLOAD_DIR, dispatcher, LOGGER
+from bot import DOWNLOAD_DIR, dispatcher
 from bot.helper.telegram_helper.message_utils import sendMessage, sendMarkup, editMessage
 from bot.helper.telegram_helper import button_build
 from bot.helper.ext_utils.bot_utils import get_readable_file_size, is_url
@@ -47,23 +47,20 @@ def _watch(bot, update, isZip=False, isLeech=False, pswd=None, tag=None):
 
     reply_to = update.message.reply_to_message
     if reply_to is not None:
-        link = reply_to.text.strip()
+        if len(link) == 0:
+            link = reply_to.text.strip()
         if reply_to.from_user.username:
             tag = f"@{reply_to.from_user.username}"
         else:
             tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
 
     if not is_url(link):
-        help_msg = (
-            "<b>Send link along with command line:</b>"
-            + "\n<code>/command</code> {link} |newname pswd: mypassword [𝚣𝚒𝚙]"
-        )
-
+        help_msg = "<b>Send link along with command line:</b>"
+        help_msg += "\n<code>/command</code> {link} |newname pswd: mypassword [𝚣𝚒𝚙]"
         help_msg += "\n\n<b>By replying to link:</b>"
         help_msg += "\n<code>/command</code> |newname pswd: mypassword [𝚣𝚒𝚙]"
         return sendMessage(help_msg, bot, update)
 
-    LOGGER.info(link)
     listener = MirrorListener(bot, update, isZip, isLeech=isLeech, pswd=pswd, tag=tag)
     buttons = button_build.ButtonMaker()
     best_video = "bv*+ba/b"
@@ -76,9 +73,9 @@ def _watch(bot, update, isZip=False, isLeech=False, pswd=None, tag=None):
         return sendMessage(tag + " " + msg, bot, update)
     if 'entries' in result:
         for i in ['144', '240', '360', '480', '720', '1080', '1440', '2160']:
-            video_format = f"bv*[height<={i}][ext=mp4]+ba/b"
+            video_format = f"bv*[height<={i}][ext=mp4]"
             buttons.sbutton(f"{i}-mp4", f"qu {msg_id} {video_format} t")
-            video_format = f"bv*[height<={i}][ext=webm]+ba/b"
+            video_format = f"bv*[height<={i}][ext=webm]"
             buttons.sbutton(f"{i}-webm", f"qu {msg_id} {video_format} t")
         buttons.sbutton("Audios", f"qu {msg_id} audio t")
         buttons.sbutton("Best Videos", f"qu {msg_id} {best_video} t")
@@ -110,7 +107,8 @@ def _watch(bot, update, isZip=False, isLeech=False, pswd=None, tag=None):
                 if quality in formats_dict:
                     formats_dict[quality][frmt['tbr']] = size
                 else:
-                    subformat = {frmt['tbr']: size}
+                    subformat = {}
+                    subformat[frmt['tbr']] = size
                     formats_dict[quality] = subformat
 
             for forDict in formats_dict:
@@ -120,9 +118,9 @@ def _watch(bot, update, isZip=False, isLeech=False, pswd=None, tag=None):
                     fps = qual_fps_ext[1]
                     ext = qual_fps_ext[2]
                     if fps != '':
-                        video_format = f"bv*[height={height}][fps={fps}][ext={ext}]+ba/b"
+                        video_format = f"bv*[height={height}][fps={fps}][ext={ext}]"
                     else:
-                        video_format = f"bv*[height={height}][ext={ext}]+ba/b"
+                        video_format = f"bv*[height={height}][ext={ext}]"
                     size = list(formats_dict[forDict].values())[0]
                     buttonName = f"{forDict} ({get_readable_file_size(size)})"
                     buttons.sbutton(str(buttonName), f"qu {msg_id} {video_format}")
@@ -146,14 +144,20 @@ def _qual_subbuttons(task_id, qual, msg):
     height = qual_fps_ext[0]
     fps = qual_fps_ext[1]
     ext = qual_fps_ext[2]
-    tbrs = list(formats_dict[qual])
+    tbrs = []
+    for tbr in formats_dict[qual]:
+        tbrs.append(tbr)
     tbrs.sort(reverse=True)
     for index, br in enumerate(tbrs):
-        tbr = f">{br}" if index == 0 else f'<{tbrs[index - 1]}'
-        if fps != '':
-            video_format = f"bv*[height={height}][fps={fps}][ext={ext}][tbr{tbr}]+ba/b"
+        if index == 0:
+            tbr = f">{br}"
         else:
-            video_format = f"bv*[height={height}][ext={ext}][tbr{tbr}]+ba/b"
+            sbr = index - 1
+            tbr = f"<{tbrs[sbr]}"
+        if fps != '':
+            video_format = f"bv*[height={height}][fps={fps}][ext={ext}][tbr{tbr}]"
+        else:
+            video_format = f"bv*[height={height}][ext={ext}][tbr{tbr}]"
         size = formats_dict[qual][br]
         buttonName = f"{br}K ({get_readable_file_size(size)})"
         buttons.sbutton(str(buttonName), f"qu {task_id} {video_format}")
@@ -201,7 +205,10 @@ def select_format(update, context):
         return editMessage('Choose Video Quality:', msg, task_info[4])
     elif data[2] == "audio":
         query.answer()
-        playlist = len(data) == 4
+        if len(data) == 4:
+            playlist = True
+        else:
+            playlist = False
         return _audio_subbuttons(task_id, msg, playlist)
     elif data[2] != "cancel":
         query.answer()
@@ -209,7 +216,13 @@ def select_format(update, context):
         link = task_info[2]
         name = task_info[3]
         qual = data[2]
-        playlist = len(data) == 4
+        if qual.startswith('bv*['): # To not exceed telegram button bytes limits. Temp solution.
+            height = resplit(r'\[|\]', qual, maxsplit=2)[1]
+            qual = qual + f"+ba/b[{height}]"
+        if len(data) == 4:
+            playlist = True
+        else:
+            playlist = False
         ydl = YoutubeDLHelper(listener)
         Thread(target=ydl.add_download, args=(link, f'{DOWNLOAD_DIR}{task_id}', name, qual, playlist)).start()
     del listener_dict[task_id]

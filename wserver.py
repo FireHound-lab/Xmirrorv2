@@ -25,7 +25,7 @@ page = """
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Torrent File Selector</title>
-    <link rel="icon" href="https://telegra.ph/file/cc06d0c613491080cc174.png" type="image/jpg">
+    <link rel="icon" href="https://telegra.ph/file/f6e2c53301fbf58c40ed4.jpg" type="image/jpg">
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
@@ -169,10 +169,26 @@ input[type="submit"]:hover, input[type="submit"]:focus{
 #treeview .parent > ul {
     display: none;
 }
+#sticks {
+  margin: 0vh 1vw;
+  margin-bottom: 1vh;
+  padding: 1vh 3vw;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgba(255, 255, 255, 0.11);
+  border-radius: 20px;
+  background-color: #161b22;
+  align-items: center;
+}
+#sticks.stick {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+}
 </style>
 </head>
 <body>
-  <!--© Designed and coded by-Telegram-->
+  <!--© Designed and coded by @bipuldey19-Telegram-->
     <header>
       <div class="brand">
         <img
@@ -185,14 +201,14 @@ input[type="submit"]:hover, input[type="submit"]:focus{
       </div>
       <div class="social">
         <a href="https://github.com/FireHound-lab/Xmirrorv2"><i class="fab fa-github"></i></a>
-        <a href="https://t.me/InvizibleWalker"><i class="fab fa-telegram"></i></a>
+        <a href="https://t.me/Firehound-Lab"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
-    <section>
-      <div class="intro">
-        <h4>Selected files size: <b id="checked_size">0</b> of <b id="total_size">0</b></h4>
+    <div id="sticks">
         <h4>Selected files: <b id="checked_files">0</b> of <b id="total_files">0</b></h4>
-      </div>
+        <h4>Selected files size: <b id="checked_size">0</b> of <b id="total_size">0</b></h4>
+    </div>
+      <section>
       <form action="{form_url}" method="POST">
        {My_content}
        <input type="submit" name="Select these files ;)">
@@ -340,6 +356,19 @@ $('input[type="checkbox"]').change(function(e) {
         } while (size > 1024);
         return Math.max(size, 0).toFixed(1) + byteUnits[i];
     }
+    function sticking() {
+        var window_top = $(window).scrollTop();
+        var div_top = $('.brand').offset().top;
+        if (window_top > div_top) {
+            $('#sticks').addClass('stick');
+        } else {
+            $('#sticks').removeClass('stick');
+        }
+    }
+    $(function () {
+        $(window).scroll(sticking);
+        sticking();
+    });
 </script>
 </body>
 </html>
@@ -352,7 +381,7 @@ code_page = """
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Torrent Code Checker</title>
-    <link rel="icon" href="https://telegra.ph/file/cc06d0c613491080cc174.png" type="image/jpg">
+    <link rel="icon" href="https://telegra.ph/file/f6e2c53301fbf58c40ed4.jpg" type="image/jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -520,7 +549,7 @@ section span{
     </style>
   </head>
 <body>
-   <!--© Designed and coded by -Telegram-->
+   <!--© Designed and coded by @bipuldey19-Telegram-->
     <header>
       <div class="brand">
         <img
@@ -683,7 +712,7 @@ async def set_priority(request):
 @routes.get('/')
 async def homepage(request):
 
-    return web.Response(text="<h1>ReileenHub <a href='https://github.com/FireHound-lab/Xmirrorv2'>@GitHub</a> By <a href='https://github.com/FireHound-lab'>Skillet</a></h1>", content_type="text/html")
+    return web.Response(text="<h1>See Xmirror-V2 <a href='https://github.com/FireHound-lab/Xmirrorv2'>@GitHub</a> By <a href='https://github.com/Firehound-Lab'>Firehound-Lab</a></h1>", content_type="text/html")
 
 async def e404_middleware(app, handler):
 

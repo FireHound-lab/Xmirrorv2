@@ -1,5 +1,4 @@
 import signal
-import os
 
 from os import path as ospath, remove as osremove, execl as osexecl
 from subprocess import run as srun
@@ -66,15 +65,15 @@ def start(update, context):
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         start_string = f'''
-I can mirror all your links to Google Drive!
+This bot can mirror all your links to Google Drive!
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
         sendMarkup(start_string, context.bot, update, reply_markup)
     else:
-        sendMarkup('Not Authorized user, deploy your own bot', context.bot, update, reply_markup)
+        sendMarkup('Not Authorized user, deploy your bot kek', context.bot, update, reply_markup)
 
 def restart(update, context):
-    restart_message = sendMessage("Restarting..Please wait...", context.bot, update)
+    restart_message = sendMessage("Restarting...", context.bot, update)
     if Interval:
         Interval[0].cancel()
     alive.kill()
@@ -97,7 +96,7 @@ def restart(update, context):
 
 def ping(update, context):
     start_time = int(round(time() * 1000))
-    reply = sendMessage("Starting Ping....", context.bot, update)
+    reply = sendMessage("Starting Ping", context.bot, update)
     end_time = int(round(time() * 1000))
     editMessage(f'{end_time - start_time} ms', reply)
 
@@ -175,7 +174,7 @@ help_string_telegraph = f'''<br>
 '''
 
 help = telegraph.create_page(
-        title='ReileenHub help',
+        title='ReileenHub Help',
         content=help_string_telegraph,
     )["path"]
 
@@ -242,11 +241,11 @@ def main():
     if ospath.isfile(".restartmsg"):
         with open(".restartmsg") as f:
             chat_id, msg_id = map(int, f)
-        bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
+        bot.edit_message_text("Restarted xD!", chat_id, msg_id)
         osremove(".restartmsg")
     elif OWNER_ID:
         try:
-            text = "<b>I'm Alive (Again) !! Please Re-Mirror your beloved pending files/Links!</b>"
+            text = "<b>I'm Alive !!! Please remirror your files/links!</b>"
             bot.sendMessage(chat_id=OWNER_ID, text=text, parse_mode=ParseMode.HTML)
             if AUTHORIZED_CHATS:
                 for i in AUTHORIZED_CHATS:
