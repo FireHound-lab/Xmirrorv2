@@ -43,10 +43,11 @@ if os.path.exists('.git'):
     subprocess.run(["rm", "-rf", ".git"])
 
 subprocess.run([f"git init -q \
-                  && git config --global user.email machintosh117@protonmail.com \
+                  && git config --global user.email Machintosh117@protonmail.com \
                   && git config --global user.name Firehound-Lab \
                   && git add . \
                   && git commit -sm update -q \
                   && git remote add origin {UPSTREAM_REPO} \
                   && git fetch origin -q \
-                  && git reset --hard origin/master -q"], shell=True)
+                  && git reset --hard origin/main -q"], shell=True)
+
