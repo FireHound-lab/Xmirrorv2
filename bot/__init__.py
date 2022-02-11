@@ -40,7 +40,6 @@ try:
         if res.status_code == 200:
             with open('.netrc', 'wb+') as f:
                 f.write(res.content)
-                f.close()
         else:
             logging.error(f"Failed to download .netrc {res.status_code}")
     except Exception as e:
@@ -181,6 +180,7 @@ def aria2c_init():
             aria2.remove([download], force=True, files=True)
     except Exception as e:
         logging.error(f"Aria2c initializing error: {e}")
+        pass
 
 if not ospath.isfile(".restartmsg"):
     sleep(1)
@@ -428,7 +428,6 @@ try:
         if res.status_code == 200:
             with open('token.pickle', 'wb+') as f:
                 f.write(res.content)
-                f.close()
         else:
             logging.error(f"Failed to download token.pickle, link got HTTP response: {res.status_code}")
     except Exception as e:
@@ -445,7 +444,6 @@ try:
             if res.status_code == 200:
                 with open('accounts.zip', 'wb+') as f:
                     f.write(res.content)
-                    f.close()
             else:
                 logging.error(f"Failed to download accounts.zip, link got HTTP response: {res.status_code}")
         except Exception as e:
@@ -465,7 +463,6 @@ try:
         if res.status_code == 200:
             with open('drive_folder', 'wb+') as f:
                 f.write(res.content)
-                f.close()
         else:
             logging.error(f"Failed to download drive_folder, link got HTTP response: {res.status_code}")
     except Exception as e:
@@ -481,7 +478,6 @@ try:
         if res.status_code == 200:
             with open('cookies.txt', 'wb+') as f:
                 f.write(res.content)
-                f.close()
         else:
             logging.error(f"Failed to download cookies.txt, link got HTTP response: {res.status_code}")
     except Exception as e:
