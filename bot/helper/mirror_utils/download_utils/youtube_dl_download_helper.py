@@ -81,10 +81,11 @@ class YoutubeDLHelper:
                     self._last_downloaded = downloadedBytes
                     self.downloaded_bytes += chunk_size
                 else:
-                    if d.get('total_bytes'):
+                    try:
                         self.size = d['total_bytes']
-                    elif d.get('total_bytes_estimate'):
-                        self.size = d['total_bytes_estimate']
+                    except KeyError:
+                        if d.get('total_bytes_estimate'):
+                            self.size = d['total_bytes_estimate']
                     self.downloaded_bytes = d['downloaded_bytes']
                 try:
                     self.progress = (self.downloaded_bytes / self.size) * 100
@@ -133,10 +134,7 @@ class YoutubeDLHelper:
             ext = realName.split('.')[-1]
             if name == "":
                 newname = str(realName).split(f" [{result['id'].replace('*', '_')}]")
-                if len(newname) > 1:
-                    self.name = newname[0] + '.' + ext
-                else:
-                    self.name = newname[0]
+                self.name = newname[0] + '.' + ext if len(newname) > 1 else newname[0]
             else:
                 self.name = f"{name}.{ext}"
 
@@ -155,31 +153,19 @@ class YoutubeDLHelper:
         except ValueError:
             self.__onDownloadError("Download Stopped by User!")
 
-    def add_download(self, link, path, name, qual, playlist, args):
+    def add_download(self, link, path, name, qual, playlist):
         if playlist:
             self.opts['ignoreerrors'] = True
+        if "hotstar" in link or "sonyliv" in link:
+            self.opts['geo_bypass_country'] = 'IN'
         self.__gid = ''.join(random.SystemRandom().choices(string.ascii_letters + string.digits, k=10))
         self.__onDownloadStart()
         if qual.startswith('ba/b'):
             audio_info = qual.split('-')
             qual = audio_info[0]
-            if len(audio_info) == 2:
-                rate = audio_info[1]
-            else:
-                rate = 320
+            rate = audio_info[1] if len(audio_info) == 2 else 320
             self.opts['postprocessors'] = [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': f'{rate}'}]
         self.opts['format'] = qual
-        if args is not None:
-            args = args.split('|')
-            for arg in args:
-                xy = arg.split(':')
-                if xy[1].startswith('^'):
-                    xy[1] = int(xy[1].split('^')[1])
-                elif xy[1].lower() == 'true':
-                    xy[1] = True
-                elif xy[1].lower() == 'false':
-                    xy[1] = False
-                self.opts[xy[0]] = xy[1]
         LOGGER.info(f"Downloading with YT-DLP: {link}")
         self.extractMetaData(link, name)
         if self.__is_cancelled:
@@ -195,4 +181,3 @@ class YoutubeDLHelper:
         LOGGER.info(f"Cancelling Download: {self.name}")
         if not self.__downloading:
             self.__onDownloadError("Download Cancelled by User!")
-
